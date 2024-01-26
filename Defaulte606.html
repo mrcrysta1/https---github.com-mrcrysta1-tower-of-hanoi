@@ -33,7 +33,7 @@ var PositionOfRing = new Array()
 var zindex = 100;
 var NumberOfMoves;
 var itsoutofpile;
-
+var moveSound = new Audio('Record Scratch - Sound Effect (HD) [TubeRipper.com].m4a');
 $(document).ready(function(){
 	Initialise();
 });
@@ -85,7 +85,7 @@ function ActivateRing(n){
 function PrepareDropAreas(){
 	
 		$('#Area1').droppable({
-			drop: function( event, ui ) {
+			drop: function( event, ui ) {PlayMoveSound();
 				var Ring = parseInt(ui.draggable.attr('data-val'));
 				if(PositionOfRing[Ring]!=1){
 					ui.draggable.animate({left:(0+100-Ring*10)+'px',top:((10-NumOfRingsOnPlynth[1])*50-50)+'px'},100);
@@ -119,7 +119,7 @@ function PrepareDropAreas(){
 		});
 	
 		$('#Area2').droppable({
-			drop: function( event, ui ) {
+			drop: function( event, ui ) {PlayMoveSound();
 				var Ring = parseInt(ui.draggable.attr('data-val'));
 				if(PositionOfRing[Ring]!=2){
 					ui.draggable.animate({left:(310+100-Ring*10)+'px',top:((10-NumOfRingsOnPlynth[2])*50-50)+'px'},100);
@@ -153,7 +153,7 @@ function PrepareDropAreas(){
 		});
 	
 		$('#Area3').droppable({
-			drop: function( event, ui ) {
+			drop: function( event, ui ) {PlayMoveSound();
 				var Ring = parseInt(ui.draggable.attr('data-val'));
 				if(PositionOfRing[Ring]!=3){
 					ui.draggable.animate({left:(620+100-Ring*10)+'px',top:((10-NumOfRingsOnPlynth[3])*50-50)+'px'},100);
@@ -186,6 +186,9 @@ function PrepareDropAreas(){
 			}
 		});
 	
+}function PlayMoveSound() {
+    moveSound.currentTime = 0; // Reset the sound to the beginning
+    moveSound.play();
 }
 function CheckForAWin(){
 	if(NumOfRingsOnPlynth[3]==Level){
@@ -198,6 +201,15 @@ function GameFrozen(A){
 	$('#MoveCounter').hide();
 	$('#IllegalMove').show();
 	$('#IllegalMove img').css({'left':((A-1)*310+20)+'px'});
+    var gameOverAudio = document.getElementById('gameOverAudio');
+    var tryAgainAudio = document.getElementById('tryagiansound');
+
+    gameOverAudio.play();
+
+    // When the game over audio ends, play the try-again audio
+    gameOverAudio.addEventListener('ended', function() {
+        tryAgainAudio.play();
+    }, false);
 }
 function Success(){
 	$('#MoveCounter').hide();
@@ -207,13 +219,17 @@ function Success(){
 	if(NumberOfMoves > Math.pow(2,Level)-1){
 		message+= '<br>It is possible to do it using fewer moves.';
 		$('#Congratulations img').hide();
+		var lossing = document.getElementById('lossing');
+		lossing.play();
 	}else{
 		$('#TryAgain').hide();
 		$('#Congratulations img').show();
 		$('#Trophybutton').show();
 		$('#Trophybutton').val('Claim Your Trophy for completing this puzzle.');
 		localStorage.setItem('TowerOfHanoiLevel'+Level, NumberOfMoves);
-		$('#td'+Level).html(NumberOfMoves);
+		$('#td'+Level).html(NumberOfMoves);// Play the success sound
+		 var successSound = document.getElementById('successSound');
+    successSound.play();
 	}	
 	$('#NoM').html(message);
 }
@@ -305,10 +321,16 @@ function ClaimTrophy() {
 		<p style="text-align:center" ><input type="button" id="Trophybutton" value="Claim Your Trophy" name="Trophy" onClick="ClaimTrophy();" ></p>
 		<img alt="Correct" src="img/Correct.png" style="width: 207px; height: 207px; display:block; margin:10px auto 2px;">
 	</div>
-
+	<audio id="backgroundMusic" loop autoplay  volume="0.5">
+		<source src="Tower of Hanoi Five Rings Solution 5 [TubeRipper.com].m4a" type="audio/mp4">
+		Your browser does not support the audio tag.
+	</audio>
 </div>
+<audio id="successSound" src="succcess.m4a"></audio>
+<audio id="lossing" src="overFanfare - Sound Effects [TubeRipper.com].m4a"></audio>
 
-
+<audio id="gameOverAudio" src="gameover - Sound Effects [TubeRipper.com].m4a" preload="auto"></audio>
+<audio id="tryagiansound" src="try again re - Sound Effects [TubeRipper.com].m4a" preload="auto"></audio>
 
 
 
