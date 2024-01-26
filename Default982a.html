@@ -207,9 +207,16 @@ function GameFrozen(A){
 	$('#IllegalMove').show();
 	$('#IllegalMove img').css({'left':((A-1)*310+20)+'px'});
 
-	   // Play game over audio
-	   var audio = document.getElementById('gameOverAudio');
-    audio.play();
+
+    var gameOverAudio = document.getElementById('gameOverAudio');
+    var tryAgainAudio = document.getElementById('tryagiansound');
+
+    gameOverAudio.play();
+
+    // When the game over audio ends, play the try-again audio
+    gameOverAudio.addEventListener('ended', function() {
+        tryAgainAudio.play();
+    }, false);
 }
 function Success(){
 	$('#MoveCounter').hide();
@@ -220,8 +227,8 @@ function Success(){
 		message+= '<br>It is possible to do it using fewer moves.';
 		$('#Congratulations img').hide();
 
-		var tryagiansound = document.getElementById('tryagain');
-		tryagiansound.play();
+		var lossing = document.getElementById('lossing');
+		lossing.play();
 	}else{
 		$('#TryAgain').hide();
 		$('#Congratulations img').show();
@@ -334,9 +341,10 @@ function ClaimTrophy() {
 	</audio>
 </div>
 <audio id="successSound" src="succcess.m4a"></audio>
-<audio id="tryagain" src="try again re - Sound Effects [TubeRipper.com].m4a"></audio>
+<audio id="lossing" src="overFanfare - Sound Effects [TubeRipper.com].m4a"></audio>
 
-<audio id="gameOverAudio" src="overFanfare - Sound Effects [TubeRipper.com].m4a" preload="auto"></audio>
+<audio id="gameOverAudio" src="gameover - Sound Effects [TubeRipper.com].m4a" preload="auto"></audio>
+<audio id="tryagiansound" src="try again re - Sound Effects [TubeRipper.com].m4a" preload="auto"></audio>
 
 
 
